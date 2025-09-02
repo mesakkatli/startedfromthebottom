@@ -5,64 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TIP Notları - Ana Sayfa</title>
     <style>
-        :root {
-            --primary-turquoise: #20B2AA;
-            --light-turquoise: #48D1CC;
-            --background-grey: #ECEFF1;
-            --text-dark: #37474F;
-            --border-light: #CFD8DC;
-            --white: #ffffff;
-        }
-        body {
-            font-family: 'Lato', sans-serif;
-            margin: 0;
-            background-color: var(--background-grey);
-            color: var(--text-dark);
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        :root { --primary-turquoise: #20B2AA; --light-turquoise: #48D1CC; --background-grey: #ECEFF1; --text-dark: #37474F; --border-light: #CFD8DC; --white: #ffffff; }
+        body { font-family: 'Lato', sans-serif; margin: 0; background-color: var(--background-grey); color: var(--text-dark); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         a { text-decoration: none; }
         ul { list-style-type: none; margin: 0; padding: 0; }
         .site-header { background-color: var(--primary-turquoise); color: var(--white); padding: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .site-header .container { display: flex; justify-content: space-between; align-items: center; }
         .logo-image { max-height: 60px; width: auto; }
-        .main-nav > ul > li {
-            display: inline-block;
-            position: relative;
-            margin: 0 4px;
-            padding-bottom: 10px;
-        }
-        .main-nav > ul > li > a {
-            color: var(--text-dark);
-            background-color: var(--background-grey);
-            padding: 8px 18px;
-            display: block;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-        }
-        .main-nav > ul > li > a:hover {
-            background-color: var(--white);
-            color: var(--primary-turquoise);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: var(--white);
-            min-width: 250px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 0;
-        }
+        .main-nav > ul > li { display: inline-block; position: relative; margin: 0 4px; padding-bottom: 10px; }
+        .main-nav > ul > li > a { color: var(--text-dark); background-color: var(--background-grey); padding: 8px 18px; display: block; font-weight: bold; border-radius: 50px; transition: all 0.3s ease; }
+        .main-nav > ul > li > a:hover { background-color: var(--white); color: var(--primary-turquoise); transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; background-color: var(--white); min-width: 250px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; border-radius: 12px; overflow: hidden; margin-top: 0; }
         .dropdown-menu li a { color: var(--text-dark); padding: 12px 16px; display: block; border-bottom: 1px solid var(--border-light); }
         .dropdown-menu li:last-child a { border-bottom: none; }
         .dropdown-menu li a:hover { background-color: var(--background-grey); }
@@ -90,17 +44,88 @@
             </a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#">Dönem 1</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
-                    <li><a href="#">Dönem 2</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
-                    <li><a href="#">Dönem 3</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
-                    <li><a href="#">Dönem 4</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
-                    <li><a href="#">Dönem 5</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
-                    <li><a href="#">Dönem 6</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
+                    <li><a href="#">Dönem 1</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="./ders.html?donem=donem1&ders=biyokimya">Tıbbi Biyokimya</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=histoloji">Histoloji ve Embriyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=cocuk">Çocuk Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=biyoloji">Tıbbi Biyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=fizyoloji">Fizyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=biyofizik">Biyofizik</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=anatomi">Anatomi</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=ruh">Ruh Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem1&ders=halk">Halk Sağlığı</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Dönem 2</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="./ders.html?donem=donem2&ders=biyokimya">Tıbbi Biyokimya</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=histoloji">Histoloji ve Embriyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=cocuk">Çocuk Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=biyoloji">Tıbbi Biyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=fizyoloji">Fizyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=biyofizik">Biyofizik</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=anatomi">Anatomi</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=ruh">Ruh Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem2&ders=halk">Halk Sağlığı</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Dönem 3</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="./ders.html?donem=donem3&ders=biyokimya">Tıbbi Biyokimya</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=histoloji">Histoloji ve Embriyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=cocuk">Çocuk Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=biyoloji">Tıbbi Biyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=fizyoloji">Fizyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=biyofizik">Biyofizik</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=anatomi">Anatomi</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=ruh">Ruh Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem3&ders=halk">Halk Sağlığı</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Dönem 4</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="./ders.html?donem=donem4&ders=biyokimya">Tıbbi Biyokimya</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=histoloji">Histoloji ve Embriyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=cocuk">Çocuk Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=biyoloji">Tıbbi Biyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=fizyoloji">Fizyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=biyofizik">Biyofizik</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=anatomi">Anatomi</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=ruh">Ruh Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem4&ders=halk">Halk Sağlığı</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Dönem 5</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="./ders.html?donem=donem5&ders=biyokimya">Tıbbi Biyokimya</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=histoloji">Histoloji ve Embriyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=cocuk">Çocuk Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=biyoloji">Tıbbi Biyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=fizyoloji">Fizyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=biyofizik">Biyofizik</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=anatomi">Anatomi</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=ruh">Ruh Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem5&ders=halk">Halk Sağlığı</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Dönem 6</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="./ders.html?donem=donem6&ders=biyokimya">Tıbbi Biyokimya</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=histoloji">Histoloji ve Embriyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=cocuk">Çocuk Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=biyoloji">Tıbbi Biyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=fizyoloji">Fizyoloji</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=biyofizik">Biyofizik</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=anatomi">Anatomi</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=ruh">Ruh Sağlığı ve Hastalıkları</a></li>
+                            <li><a href="./ders.html?donem=donem6&ders=halk">Halk Sağlığı</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <div class="container main-content-area">
         <main class="articles">
             <h2>Öne Çıkan Notlar</h2>
@@ -111,7 +136,6 @@
                     <a href="./not-detay.html" class="read-more">Devamını Oku &rarr;</a>
                 </div>
             </article>
-            
             <article class="card">
                 <div class="card-content">
                     <h3>Biyokimyanın Temel Taşları: Lipitler ve Karbonhidratlar</h3>
@@ -132,7 +156,6 @@
             </div>
         </aside>
     </div>
-
     <footer class="site-footer">
         <div class="container">
             <p>&copy; 2024 TIP Notları. Tüm Hakları Saklıdır.</p>
