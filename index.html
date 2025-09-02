@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIP Notları - Ana Sayfa</title>
+    <style>
+        :root {
+            --primary-turquoise: #20B2AA;
+            --light-turquoise: #48D1CC;
+            --background-grey: #ECEFF1;
+            --text-dark: #37474F;
+            --border-light: #CFD8DC;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            background-color: var(--background-grey);
+            color: var(--text-dark);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        a { text-decoration: none; }
+        ul { list-style-type: none; margin: 0; padding: 0; }
+        .site-header { background-color: var(--primary-turquoise); color: var(--white); padding: 10px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .site-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-image { max-height: 60px; width: auto; }
+        .main-nav > ul > li {
+            display: inline-block;
+            position: relative;
+            margin: 0 4px;
+            padding-bottom: 10px;
+        }
+        .main-nav > ul > li > a {
+            color: var(--text-dark);
+            background-color: var(--background-grey);
+            padding: 8px 18px;
+            display: block;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        .main-nav > ul > li > a:hover {
+            background-color: var(--white);
+            color: var(--primary-turquoise);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--white);
+            min-width: 250px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 0;
+        }
+        .dropdown-menu li a { color: var(--text-dark); padding: 12px 16px; display: block; border-bottom: 1px solid var(--border-light); }
+        .dropdown-menu li:last-child a { border-bottom: none; }
+        .dropdown-menu li a:hover { background-color: var(--background-grey); }
+        .main-nav > ul > li:hover .dropdown-menu { display: block; }
+        .main-content-area { display: flex; gap: 30px; margin-top: 30px; padding: 0 20px; }
+        .articles { flex: 3; }
+        .sidebar { flex: 1; }
+        .card { background-color: var(--white); border: 1px solid var(--border-light); border-radius: 30px; margin-bottom: 20px; overflow: hidden; }
+        .card-content { padding: 25px 30px; }
+        .card h3 { margin-top: 0; }
+        .card a.read-more { color: var(--primary-turquoise); font-weight: bold; }
+        .card a.read-more:hover { text-decoration: underline; }
+        .sidebar-widget { background-color: var(--white); border: 1px solid var(--border-light); border-radius: 30px; padding: 25px 30px; margin-bottom: 20px; }
+        .sidebar-widget h4 { color: var(--primary-turquoise); margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; }
+        .sidebar-widget ul li a { color: var(--text-dark); padding: 5px 0; display: block; }
+        .sidebar-widget ul li a:hover { color: var(--light-turquoise); }
+        .site-footer { background-color: var(--primary-turquoise); color: var(--white); padding: 40px 0; margin-top: 40px; text-align: center; box-shadow: 0 -2px 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="./index.html" class="logo">
+                <img src="https://i.postimg.cc/g2HtyywK/logo.png" alt="TIP Notları Logo" class="logo-image">
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#">Dönem 1</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
+                    <li><a href="#">Dönem 2</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
+                    <li><a href="#">Dönem 3</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
+                    <li><a href="#">Dönem 4</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
+                    <li><a href="#">Dönem 5</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
+                    <li><a href="#">Dönem 6</a><ul class="dropdown-menu"><li><a href="#">Tıbbi Biyokimya</a></li><li><a href="#">Histoloji ve Embriyoloji</a></li><li><a href="#">Çocuk Sağlığı ve Hastalıkları</a></li><li><a href="#">Tıbbi Biyoloji</a></li><li><a href="#">Fizyoloji</a></li><li><a href="#">Biyofizik</a></li><li><a href="#">Anatomi</a></li><li><a href="#">Ruh Sağlığı ve Hastalıkları</a></li><li><a href="#">Halk Sağlığı</a></li></ul></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container main-content-area">
+        <main class="articles">
+            <h2>Öne Çıkan Notlar</h2>
+            <article class="card">
+                <div class="card-content">
+                    <h3>Davranışın Nörobiyolojik Temelleri</h3>
+                    <p>İnsan davranışlarının beynin işleyişi ve sinir sistemi üzerinden nasıl şekillendiğini inceler. Ruh sağlığı ve psikiyatrik hastalıkların biyolojik temellerine ışık tutar.</p>
+                    <a href="./not-detay.html" class="read-more">Devamını Oku &rarr;</a>
+                </div>
+            </article>
+            
+            <article class="card">
+                <div class="card-content">
+                    <h3>Biyokimyanın Temel Taşları: Lipitler ve Karbonhidratlar</h3>
+                    <p>Bu kaynaklar, hücre biyolojisi, insan fizyolojisi ve tıp alanındaki çeşitli konuları kapsamaktadır. Özellikle hücre zarı taşıma mekanizmaları, aktif ve pasif taşıma, difüzyon ve osmoz gibi temel süreçler detaylıca açıklanmıştır.</p>
+                    <a href="./not-detay-2.html" class="read-more">Devamını Oku &rarr;</a>
+                </div>
+            </article>
+        </main>
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h4>Popüler Dersler</h4>
+                <ul>
+                    <li><a href="#">Fizyoloji</a></li>
+                    <li><a href="#">Anatomi</a></li>
+                    <li><a href="#">Histoloji ve Embriyoloji</a></li>
+                    <li><a href="#">Biyofizik</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2024 TIP Notları. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+</body>
+</html>
