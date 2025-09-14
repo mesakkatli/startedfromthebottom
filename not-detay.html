@@ -9,15 +9,25 @@
         
         /* Dark Mode Variables */
         body.dark-mode {
-            --primary-turquoise: #1A9B96;
-            --light-turquoise: #2DB5B0;
-            --background-grey: #1a1a1a;
-            --text-dark: #e0e0e0;
-            --border-light: #333333;
-            --white: #2d2d2d;
+            --primary-turquoise: #00BCD4;
+            --light-turquoise: #26C6DA;
+            --background-grey: #0f0f0f;
+            --text-dark: #f5f5f5;
+            --border-light: #2a2a2a;
+            --white: #1e1e1e;
         }
         
-        body { font-family: 'Lato', sans-serif; margin: 0; background-color: var(--background-grey); color: var(--text-dark); }
+        body { 
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            background: linear-gradient(135deg, var(--background-grey) 0%, #f8f9fa 100%); 
+            color: var(--text-dark); 
+            min-height: 100vh;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, var(--background-grey) 0%, #1a1a1a 100%);
+        }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         a { text-decoration: none; }
         ul { list-style-type: none; margin: 0; padding: 0; }
