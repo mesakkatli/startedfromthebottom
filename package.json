@@ -1,0 +1,23 @@
+{
+  "name": "tip-notlari",
+  "version": "1.0.0",
+  "description": "TIP Notları - Tıp Fakültesi Ders Notları ve Flashcard Sistemi",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server . -p 3000 -o",
+    "start": "npx http-server . -p 3000",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": [
+    "medical",
+    "education",
+    "flashcards",
+    "notes",
+    "turkish"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
