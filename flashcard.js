@@ -4,6 +4,7 @@ class FlashcardSystem {
         this.currentIndex = 0;
         this.isFlipped = false;
         this.studyMode = false;
+        this.isDarkMode = localStorage.getItem('darkMode') === 'true';
         this.stats = {
             total: 0,
             studied: 0,
@@ -13,6 +14,7 @@ class FlashcardSystem {
         };
         this.initializeEventListeners();
         this.loadSampleCards();
+        this.initializeDarkMode();
     }
 
     initializeEventListeners() {
@@ -55,6 +57,9 @@ class FlashcardSystem {
 
         // Keyboard events
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
+        
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', () => this.toggleDarkMode());
     }
 
     handleFileSelect(event) {
@@ -101,37 +106,94 @@ class FlashcardSystem {
 
     readFileContent(file) {
         return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            
-            reader.onload = (e) => {
-                const content = e.target.result;
-                
-                if (file.type === 'text/plain') {
-                    resolve(content);
-                } else {
-                    // For other file types, we'll extract basic text content
-                    // In a real implementation, you'd use libraries like PDF.js for PDFs
-                    resolve(this.extractBasicText(content, file.type));
-                }
-            };
-            
-            reader.onerror = () => reject(new Error('Dosya okunamadı'));
-            
             if (file.type === 'text/plain') {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = () => reject(new Error('Dosya okunamadı'));
                 reader.readAsText(file);
+            } else if (file.type === 'application/pdf') {
+                this.extractPDFText(file).then(resolve).catch(reject);
+            } else if (file.type.includes('word') || file.name.endsWith('.docx')) {
+                this.extractWordText(file).then(resolve).catch(reject);
             } else {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    resolve(this.extractBasicText(e.target.result, file.type));
+                };
+                reader.onerror = () => reject(new Error('Dosya okunamadı'));
                 reader.readAsArrayBuffer(file);
             }
         });
     }
 
+    async extractPDFText(file) {
+        try {
+            // PDF.js kullanarak PDF'den metin çıkarma
+            const arrayBuffer = await file.arrayBuffer();
+            
+            // PDF.js'i dinamik olarak yükle
+            if (!window.pdfjsLib) {
+                await this.loadPDFJS();
+            }
+            
+            const pdf = await window.pdfjsLib.getDocument(arrayBuffer).promise;
+            let fullText = '';
+            
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                fullText += pageText + '\n';
+            }
+            
+            return fullText;
+        } catch (error) {
+            console.error('PDF işleme hatası:', error);
+            return 'PDF dosyası işlenirken hata oluştu.';
+        }
+    }
+
+    async extractWordText(file) {
+        try {
+            const arrayBuffer = await file.arrayBuffer();
+            
+            // Mammoth.js'i dinamik olarak yükle
+            if (!window.mammoth) {
+                await this.loadMammoth();
+            }
+            
+            const result = await window.mammoth.extractRawText({arrayBuffer});
+            return result.value;
+        } catch (error) {
+            console.error('Word dosyası işleme hatası:', error);
+            return 'Word dosyası işlenirken hata oluştu.';
+        }
+    }
+
+    async loadPDFJS() {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.js';
+            script.onload = () => {
+                window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.js';
+                resolve();
+            };
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+
+    async loadMammoth() {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
     extractBasicText(content, fileType) {
-        // Simplified text extraction - in production, use proper libraries
-        if (fileType.includes('pdf')) {
-            return 'PDF içeriği tespit edildi. Gerçek uygulamada PDF.js kullanılmalı.';
-        } else if (fileType.includes('word')) {
-            return 'Word belgesi tespit edildi. Gerçek uygulamada mammoth.js kullanılmalı.';
-        } else if (fileType.includes('powerpoint')) {
+        if (fileType.includes('powerpoint')) {
             return 'PowerPoint sunumu tespit edildi. Gerçek uygulamada özel kütüphane gerekli.';
         }
         return 'Desteklenmeyen dosya formatı.';
@@ -422,6 +484,23 @@ class FlashcardSystem {
                 }
                 break;
         }
+    }
+
+    initializeDarkMode() {
+        if (this.isDarkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').innerHTML = '☀️';
+        }
+    }
+
+    toggleDarkMode() {
+        this.isDarkMode = !this.isDarkMode;
+        document.body.classList.toggle('dark-mode');
+        
+        const toggle = document.getElementById('darkModeToggle');
+        toggle.innerHTML = this.isDarkMode ? '☀️' : '🌙';
+        
+        localStorage.setItem('darkMode', this.isDarkMode);
     }
 }
 

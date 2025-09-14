@@ -6,6 +6,17 @@
     <title>TIP Notları - Ana Sayfa</title>
     <style>
         :root { --primary-turquoise: #20B2AA; --light-turquoise: #48D1CC; --background-grey: #ECEFF1; --text-dark: #37474F; --border-light: #CFD8DC; --white: #ffffff; }
+        
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --primary-turquoise: #1A9B96;
+            --light-turquoise: #2DB5B0;
+            --background-grey: #1a1a1a;
+            --text-dark: #e0e0e0;
+            --border-light: #333333;
+            --white: #2d2d2d;
+        }
+        
         body { font-family: 'Lato', sans-serif; margin: 0; background-color: var(--background-grey); color: var(--text-dark); }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         a { text-decoration: none; }
@@ -34,7 +45,41 @@
         .sidebar-widget ul li a { color: var(--text-dark); padding: 5px 0; display: block; }
         .sidebar-widget ul li a:hover { color: var(--light-turquoise); }
         .site-footer { background-color: var(--primary-turquoise); color: var(--white); padding: 40px 0; margin-top: 40px; text-align: center; box-shadow: 0 -2px 4px rgba(0,0,0,0.1); }
+        
+        .dark-mode-toggle { 
+            background: none; 
+            border: 2px solid var(--white); 
+            color: var(--white); 
+            padding: 8px 12px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: all 0.3s ease; 
+            margin-left: 15px;
+        }
+        .dark-mode-toggle:hover { 
+            background-color: var(--white); 
+            color: var(--primary-turquoise); 
+            transform: scale(1.1); 
+        }
     </style>
+    <script>
+        // Dark mode initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').innerHTML = '☀️';
+            }
+            
+            document.getElementById('darkModeToggle').addEventListener('click', function() {
+                const darkMode = !document.body.classList.contains('dark-mode');
+                document.body.classList.toggle('dark-mode');
+                this.innerHTML = darkMode ? '☀️' : '🌙';
+                localStorage.setItem('darkMode', darkMode);
+            });
+        });
+    </script>
 </head>
 <body>
     <header class="site-header">
@@ -125,6 +170,7 @@
                     <li><a href="./flashcard.html">Flashcard</a></li>
                 </ul>
             </nav>
+            <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
         </div>
     </header>
     <div class="container main-content-area">

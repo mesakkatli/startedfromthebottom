@@ -19,5 +19,9 @@
   "license": "MIT",
   "devDependencies": {
     "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "pdf-dist": "^4.0.379",
+    "mammoth": "^1.6.0"
   }
 }

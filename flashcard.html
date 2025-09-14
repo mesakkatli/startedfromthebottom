@@ -6,6 +6,20 @@
     <title>Flashcard Oluşturucu - TIP Notları</title>
     <style>
         :root { --primary-turquoise: #20B2AA; --light-turquoise: #48D1CC; --background-grey: #ECEFF1; --text-dark: #37474F; --border-light: #CFD8DC; --white: #ffffff; --success-green: #4CAF50; --warning-orange: #FF9800; --error-red: #F44336; }
+        
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --primary-turquoise: #1A9B96;
+            --light-turquoise: #2DB5B0;
+            --background-grey: #1a1a1a;
+            --text-dark: #e0e0e0;
+            --border-light: #333333;
+            --white: #2d2d2d;
+            --success-green: #45a049;
+            --warning-orange: #e68900;
+            --error-red: #d32f2f;
+        }
+        
         body { font-family: 'Lato', sans-serif; margin: 0; background-color: var(--background-grey); color: var(--text-dark); }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         a { text-decoration: none; }
@@ -22,6 +36,23 @@
         .dropdown-menu li a:hover { background-color: var(--background-grey); }
         .main-nav > ul > li:hover .dropdown-menu { display: block; }
         .site-footer { background-color: var(--primary-turquoise); color: var(--white); padding: 40px 0; margin-top: 40px; text-align: center; box-shadow: 0 -2px 4px rgba(0,0,0,0.1); }
+        
+        .dark-mode-toggle { 
+            background: none; 
+            border: 2px solid var(--white); 
+            color: var(--white); 
+            padding: 8px 12px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: all 0.3s ease; 
+            margin-left: 15px;
+        }
+        .dark-mode-toggle:hover { 
+            background-color: var(--white); 
+            color: var(--primary-turquoise); 
+            transform: scale(1.1); 
+        }
         
         .flashcard-container { background-color: var(--white); padding: 40px 50px; margin-top: 30px; border-radius: 30px; margin-bottom: 30px; }
         .flashcard-container h2 { color: var(--primary-turquoise); border-bottom: 2px solid var(--primary-turquoise); padding-bottom: 10px; margin-bottom: 30px; }
@@ -175,6 +206,7 @@
                     <li><a href="./flashcard.html" style="background-color: var(--white); color: var(--primary-turquoise);">Flashcard</a></li>
                 </ul>
             </nav>
+            <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
         </div>
     </header>
 
