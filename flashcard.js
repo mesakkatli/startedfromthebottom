@@ -15,7 +15,7 @@ class FlashcardSystem {
         this.initializeEventListeners();
         this.initializeDarkMode();
         this.loadSampleCards();
-        this.showFlashcardGenerator(); // Başlangıçta flashcard generator'ı göster
+        this.showFlashcardGenerator();
     }
 
     initializeEventListeners() {
@@ -94,7 +94,10 @@ class FlashcardSystem {
         
         try {
             const allText = await this.extractTextFromFiles(files);
+            console.log('Extracted text:', allText.substring(0, 500) + '...');
+            
             const generatedCards = this.generateFlashcardsFromText(allText);
+            console.log('Generated cards:', generatedCards.length);
             
             if (generatedCards.length > 0) {
                 this.flashcards = generatedCards;
@@ -120,8 +123,14 @@ class FlashcardSystem {
         let allText = '';
         
         for (let file of files) {
-            const text = await this.readFileContent(file);
-            allText += text + '\n\n';
+            try {
+                const text = await this.readFileContent(file);
+                allText += text + '\n\n';
+            } catch (error) {
+                console.error('Dosya okuma hatası:', error);
+                // Hata durumunda dosya adından içerik üret
+                allText += this.generateContentFromFileName(file.name) + '\n\n';
+            }
         }
         
         return allText;
@@ -138,77 +147,114 @@ class FlashcardSystem {
                 const reader = new FileReader();
                 reader.onload = (e) => resolve(e.target.result);
                 reader.onerror = () => reject(new Error('Dosya okunamadı'));
-                reader.readAsText(file);
+                reader.readAsText(file, 'UTF-8');
             } else {
-                // Diğer dosya türleri için örnek tıbbi içerik oluştur
-                resolve(this.generateMedicalContent(fileType, fileName));
+                // Diğer dosya türleri için dosya adından içerik üret
+                resolve(this.generateContentFromFileName(fileName));
             }
         });
     }
 
-    generateMedicalContent(fileType, fileName) {
-        const medicalTopics = [
-            'Hücre: Canlıların temel yapı ve işlev birimi',
-            'Doku: Benzer yapı ve işleve sahip hücrelerin bir araya gelmesi',
-            'Organ: Belirli bir işlevi yerine getiren doku topluluğu',
-            'Sistem: Ortak bir işlevi yerine getiren organların topluluğu',
-            'Homeostaz: Vücudun iç dengesini koruma mekanizması',
-            'Metabolizma: Vücuttaki kimyasal reaksiyonların tümü',
-            'Enzim: Biyokimyasal reaksiyonları hızlandıran proteinler',
-            'Hormon: Endokrin bezlerden salgılanan kimyasal haberci moleküller',
-            'Antikor: Bağışıklık sisteminin ürettiği koruyucu proteinler',
-            'Nöron: Sinir sisteminin temel hücresi',
-            'Sinapsis: Nöronlar arası bağlantı noktası',
-            'Mitokondri: Hücrenin enerji santrali',
-            'Ribozom: Protein sentezinin gerçekleştiği organeller',
-            'DNA: Kalıtsal bilgiyi taşıyan molekül',
-            'RNA: Protein sentezinde görevli nükleik asit'
-        ];
+    generateContentFromFileName(fileName) {
+        // Dosya adından konu çıkarma
+        const topics = [];
+        const medicalKeywords = {
+            'anatomi': ['Kemik yapısı ve fonksiyonları', 'Kas sistemi anatomisi', 'Sinir sistemi yapısı', 'Dolaşım sistemi anatomisi'],
+            'fizyoloji': ['Hücre fizyolojisi ve homeostaz', 'Kardiyovasküler sistem fizyolojisi', 'Solunum sistemi fizyolojisi', 'Sinir sistemi fizyolojisi'],
+            'biyokimya': ['Protein yapısı ve fonksiyonları', 'Enzim kinetikleri', 'Metabolik yolaklar', 'Hormon biyokimyası'],
+            'histoloji': ['Epitel doku özellikleri', 'Bağ dokusu çeşitleri', 'Kas dokusu histolojisi', 'Sinir dokusu yapısı'],
+            'patoloji': ['Hücre hasarı mekanizmaları', 'İnflamasyon süreci', 'Tümör biyolojisi', 'Genetik hastalıklar'],
+            'farmakoloji': ['İlaç emilimi ve dağılımı', 'Reseptör teorisi', 'İlaç etkileşimleri', 'Toksikoloji prensipleri'],
+            'mikrobiyoloji': ['Bakteri yapısı ve üremesi', 'Viral enfeksiyonlar', 'Antibiyotik direnci', 'Bağışıklık sistemi'],
+            'kardiyoloji': ['Kalp anatomisi ve fizyolojisi', 'EKG yorumlama', 'Kalp hastalıkları', 'Hipertansiyon yönetimi'],
+            'nöroloji': ['Beyin anatomisi', 'Nörotransmiterler', 'Nörolojik muayene', 'Merkezi sinir sistemi hastalıkları']
+        };
+
+        const lowerFileName = fileName.toLowerCase();
         
-        const randomTopics = medicalTopics.sort(() => 0.5 - Math.random()).slice(0, 10);
-        return `Dosya: ${fileName}\n\n${randomTopics.join('\n')}`;
+        for (const [keyword, topicList] of Object.entries(medicalKeywords)) {
+            if (lowerFileName.includes(keyword)) {
+                topics.push(...topicList);
+                break;
+            }
+        }
+
+        // Eğer özel konu bulunamazsa genel tıp konuları ekle
+        if (topics.length === 0) {
+            topics.push(
+                'Hücre: Canlıların temel yapı ve işlev birimi',
+                'Doku: Benzer yapı ve işleve sahip hücrelerin bir araya gelmesi',
+                'Organ: Belirli bir işlevi yerine getiren doku topluluğu',
+                'Homeostaz: Vücudun iç dengesini koruma mekanizması',
+                'Metabolizma: Vücuttaki kimyasal reaksiyonların tümü'
+            );
+        }
+
+        return `Dosya: ${fileName}\n\n${topics.join('\n')}`;
     }
 
     generateFlashcardsFromText(text) {
         const cards = [];
         
-        // Basit metin işleme ile flashcard oluşturma
-        const lines = text.split('\n').filter(line => line.trim().length > 10);
-        
-        // Tanım-açıklama çiftlerini ara
-        const definitionPatterns = [
-            /([A-ZÜĞŞÇÖI][a-züğşçöıi]+(?:\s+[A-ZÜĞŞÇÖI][a-züğşçöıi]+)*)\s*[:]\s*([^.!?]+)/g,
-            /([A-ZÜĞŞÇÖI][a-züğşçöıi]+(?:\s+[A-ZÜĞŞÇÖI][a-züğşçöıi]+)*)\s*[-]\s*([^.!?]+)/g,
-        ];
+        // Satırları ayır ve temizle
+        const lines = text.split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 10);
 
-        definitionPatterns.forEach(pattern => {
-            let match;
-            while ((match = pattern.exec(text)) !== null) {
-                if (match[1] && match[2] && match[1].length > 2 && match[2].length > 10) {
-                    cards.push({
-                        id: cards.length + 1,
-                        question: `${match[1].trim()} nedir?`,
-                        answer: match[2].trim(),
-                        difficulty: null,
-                        studied: false,
-                        category: 'Tanım'
-                    });
+        console.log('Processing lines:', lines.length);
+
+        // Tanım-açıklama çiftlerini ara (: ile ayrılanlar)
+        lines.forEach(line => {
+            if (line.includes(':') && line.length > 20 && line.length < 200) {
+                const parts = line.split(':');
+                if (parts.length >= 2) {
+                    const term = parts[0].trim();
+                    const definition = parts.slice(1).join(':').trim();
+                    
+                    if (term.length > 2 && definition.length > 10) {
+                        cards.push({
+                            id: cards.length + 1,
+                            question: `${term} nedir?`,
+                            answer: definition,
+                            difficulty: null,
+                            studied: false,
+                            category: 'Tanım'
+                        });
+                    }
                 }
             }
         });
 
-        // Eğer yeterli kart oluşturulamazsa, satırlardan kart oluştur
-        if (cards.length < 5) {
-            lines.forEach((line, index) => {
-                const trimmed = line.trim();
-                if (trimmed.length > 20 && trimmed.length < 150 && cards.length < 20) {
-                    // Basit soru oluşturma
-                    const question = this.createQuestionFromSentence(trimmed);
-                    if (question) {
+        // Eğer yeterli kart yoksa, cümlelerden soru-cevap oluştur
+        if (cards.length < 3) {
+            lines.forEach(line => {
+                if (line.length > 30 && line.length < 150 && cards.length < 20) {
+                    // Tıbbi terimler ara
+                    const medicalTerms = ['hücre', 'organ', 'sistem', 'hastalık', 'tedavi', 'tanı', 'semptom', 'enzim', 'hormon', 'protein', 'doku', 'kan', 'kalp', 'beyin', 'akciğer', 'böbrek', 'karaciğer'];
+                    
+                    let foundTerm = null;
+                    for (let term of medicalTerms) {
+                        if (line.toLowerCase().includes(term)) {
+                            foundTerm = term;
+                            break;
+                        }
+                    }
+                    
+                    if (foundTerm) {
                         cards.push({
                             id: cards.length + 1,
-                            question: question,
-                            answer: trimmed,
+                            question: `${foundTerm.charAt(0).toUpperCase() + foundTerm.slice(1)} hakkında bu bilgi nedir?`,
+                            answer: line,
+                            difficulty: null,
+                            studied: false,
+                            category: 'Genel'
+                        });
+                    } else {
+                        // Genel soru oluştur
+                        cards.push({
+                            id: cards.length + 1,
+                            question: `Bu tıbbi bilgi neyi açıklar?`,
+                            answer: line,
                             difficulty: null,
                             studied: false,
                             category: 'Genel'
@@ -223,24 +269,8 @@ class FlashcardSystem {
             return this.getSampleMedicalCards();
         }
 
-        return cards.slice(0, 30); // Maksimum 30 kart
-    }
-
-    createQuestionFromSentence(sentence) {
-        const medicalTerms = ['hücre', 'organ', 'sistem', 'hastalık', 'tedavi', 'tanı', 'semptom', 'sendrom', 'enzim', 'hormon'];
-        
-        for (let term of medicalTerms) {
-            if (sentence.toLowerCase().includes(term)) {
-                return `${term.charAt(0).toUpperCase() + term.slice(1)} ile ilgili bu bilgi nedir?`;
-            }
-        }
-        
-        // Genel soru
-        if (sentence.length > 50) {
-            return `Bu açıklama neyi anlatmaktadır?`;
-        }
-        
-        return `Bu tanım neyi ifade eder?`;
+        console.log('Final cards generated:', cards.length);
+        return cards.slice(0, 25); // Maksimum 25 kart
     }
 
     getSampleMedicalCards() {
@@ -263,16 +293,16 @@ class FlashcardSystem {
             },
             {
                 id: 3,
-                question: "Homeostaz nedir?",
-                answer: "Homeostaz, vücudun iç ortamının sabit tutulması için çalışan düzenleme mekanizmalarıdır. Vücut sıcaklığı, kan şekeri, pH gibi parametrelerin dengelenmesini sağlar.",
+                question: "Homeostaz nedir ve neden önemlidir?",
+                answer: "Homeostaz, vücudun iç ortamının sabit tutulması için çalışan düzenleme mekanizmalarıdır. Vücut sıcaklığı, kan şekeri, pH gibi parametrelerin dengelenmesini sağlar ve yaşam için kritiktir.",
                 difficulty: null,
                 studied: false,
                 category: "Fizyoloji"
             },
             {
                 id: 4,
-                question: "Enzimler nasıl çalışır?",
-                answer: "Enzimler, substratlarına özgü olarak bağlanır ve aktivasyon enerjisini düşürerek biyokimyasal reaksiyonları hızlandırır. Reaksiyon sonunda değişmeden kalırlar.",
+                question: "Enzimler nasıl çalışır ve özellikleri nelerdir?",
+                answer: "Enzimler, substratlarına özgü olarak bağlanır ve aktivasyon enerjisini düşürerek biyokimyasal reaksiyonları hızlandırır. Reaksiyon sonunda değişmeden kalırlar ve tekrar kullanılabilirler.",
                 difficulty: null,
                 studied: false,
                 category: "Biyokimya"
@@ -280,10 +310,18 @@ class FlashcardSystem {
             {
                 id: 5,
                 question: "DNA ve RNA arasındaki temel farklar nelerdir?",
-                answer: "DNA çift iplikli, RNA tek ipliklidir. DNA'da timin, RNA'da urasil bulunur. DNA kalıtsal bilgiyi saklar, RNA protein sentezinde görev alır.",
+                answer: "DNA çift iplikli, RNA tek ipliklidir. DNA'da timin, RNA'da urasil bulunur. DNA kalıtsal bilgiyi saklar, RNA protein sentezinde görev alır. DNA daha kararlı, RNA daha kısa ömürlüdür.",
                 difficulty: null,
                 studied: false,
                 category: "Moleküler Biyoloji"
+            },
+            {
+                id: 6,
+                question: "Kan dolaşımının temel fonksiyonları nelerdir?",
+                answer: "Kan dolaşımı oksijen ve besin maddelerini hücrelere taşır, metabolik atıkları uzaklaştırır, vücut sıcaklığını düzenler, hormonları taşır ve bağışıklık sistemine destek sağlar.",
+                difficulty: null,
+                studied: false,
+                category: "Fizyoloji"
             }
         ];
     }
@@ -332,6 +370,8 @@ class FlashcardSystem {
         }
 
         const card = this.flashcards[this.currentIndex];
+        const questionSection = document.getElementById('questionSection');
+        const answerSection = document.getElementById('answerSection');
         const questionText = document.getElementById('questionText');
         const answerText = document.getElementById('answerText');
         const currentCard = document.getElementById('currentCard');
@@ -342,11 +382,15 @@ class FlashcardSystem {
         if (currentCard) currentCard.textContent = this.currentIndex + 1;
         if (totalCards) totalCards.textContent = this.flashcards.length;
 
-        // Reset flip state
-        this.isFlipped = false;
-        const flashcard = document.getElementById('flashcard');
-        if (flashcard) {
-            flashcard.classList.remove('flipped');
+        // Soru/cevap görünümünü ayarla
+        if (questionSection && answerSection) {
+            if (this.isFlipped) {
+                questionSection.style.display = 'none';
+                answerSection.style.display = 'block';
+            } else {
+                questionSection.style.display = 'block';
+                answerSection.style.display = 'none';
+            }
         }
 
         // Update progress
@@ -363,39 +407,28 @@ class FlashcardSystem {
         if (prevBtn) prevBtn.disabled = this.currentIndex === 0;
         if (nextBtn) nextBtn.disabled = this.currentIndex === this.flashcards.length - 1;
 
-        // Hide difficulty buttons
+        // Update flip button text
+        const flipBtn = document.getElementById('flipBtn');
+        if (flipBtn) {
+            flipBtn.textContent = this.isFlipped ? '❓ Soruyu Göster' : '💡 Cevabı Göster';
+        }
+
+        // Hide/show difficulty buttons
         const difficultyButtons = document.getElementById('difficultyButtons');
         if (difficultyButtons) {
-            difficultyButtons.style.display = 'none';
+            difficultyButtons.style.display = (this.studyMode && this.isFlipped) ? 'flex' : 'none';
         }
     }
 
     flipCard() {
         this.isFlipped = !this.isFlipped;
-        const flashcard = document.getElementById('flashcard');
-        
-        if (flashcard) {
-            if (this.isFlipped) {
-                flashcard.classList.add('flipped');
-                if (this.studyMode) {
-                    const difficultyButtons = document.getElementById('difficultyButtons');
-                    if (difficultyButtons) {
-                        difficultyButtons.style.display = 'flex';
-                    }
-                }
-            } else {
-                flashcard.classList.remove('flipped');
-                const difficultyButtons = document.getElementById('difficultyButtons');
-                if (difficultyButtons) {
-                    difficultyButtons.style.display = 'none';
-                }
-            }
-        }
+        this.displayCurrentCard();
     }
 
     nextCard() {
         if (this.currentIndex < this.flashcards.length - 1) {
             this.currentIndex++;
+            this.isFlipped = false; // Yeni karta geçerken soruyu göster
             this.displayCurrentCard();
         }
     }
@@ -403,6 +436,7 @@ class FlashcardSystem {
     previousCard() {
         if (this.currentIndex > 0) {
             this.currentIndex--;
+            this.isFlipped = false; // Yeni karta geçerken soruyu göster
             this.displayCurrentCard();
         }
     }
@@ -413,6 +447,7 @@ class FlashcardSystem {
             [this.flashcards[i], this.flashcards[j]] = [this.flashcards[j], this.flashcards[i]];
         }
         this.currentIndex = 0;
+        this.isFlipped = false;
         this.displayCurrentCard();
         alert('Kartlar karıştırıldı!');
     }
@@ -423,6 +458,7 @@ class FlashcardSystem {
             card.studied = false;
         });
         this.currentIndex = 0;
+        this.isFlipped = false;
         this.updateStats();
         this.displayCurrentCard();
         alert('İlerleme sıfırlandı!');
@@ -436,16 +472,14 @@ class FlashcardSystem {
             if (this.studyMode) {
                 btn.textContent = '📖 Normal Mod';
                 btn.style.backgroundColor = 'var(--success-green)';
-                alert('Çalışma modu aktif! Kartları çevirdikten sonra zorluk seviyesini seçebilirsiniz.');
+                alert('Çalışma modu aktif! Cevabı gördükten sonra zorluk seviyesini seçebilirsiniz.');
             } else {
                 btn.textContent = '📚 Çalışma Modu';
                 btn.style.backgroundColor = '';
-                const difficultyButtons = document.getElementById('difficultyButtons');
-                if (difficultyButtons) {
-                    difficultyButtons.style.display = 'none';
-                }
             }
         }
+        
+        this.displayCurrentCard();
     }
 
     markDifficulty(level) {
@@ -456,11 +490,6 @@ class FlashcardSystem {
         card.studied = true;
         
         this.updateStats();
-        
-        const difficultyButtons = document.getElementById('difficultyButtons');
-        if (difficultyButtons) {
-            difficultyButtons.style.display = 'none';
-        }
         
         // Auto advance to next card
         setTimeout(() => {
