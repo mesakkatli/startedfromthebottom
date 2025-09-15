@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcard Oluşturucu - TIP Notları</title>
+    <title>Slayt Özet Oluşturucu - TIP Notları</title>
     <style>
         :root { --primary-turquoise: #20B2AA; --light-turquoise: #48D1CC; --background-grey: #ECEFF1; --text-dark: #37474F; --border-light: #CFD8DC; --white: #ffffff; --success-green: #4CAF50; --warning-orange: #FF9800; --error-red: #F44336; }
         
@@ -120,7 +120,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        .flashcard-container { 
+        .summary-container { 
             background: rgba(255,255,255,0.9); 
             backdrop-filter: blur(20px);
             padding: 50px 60px; 
@@ -131,12 +131,12 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
         
-        body.dark-mode .flashcard-container {
+        body.dark-mode .summary-container {
             background: rgba(30,30,30,0.9);
             border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .flashcard-container h2 { 
+        .summary-container h2 { 
             color: var(--primary-turquoise); 
             border-bottom: 3px solid var(--primary-turquoise); 
             padding-bottom: 15px; 
@@ -235,7 +235,19 @@
             background: linear-gradient(135deg, #ffffff, #f0f0f0);
         }
         
-        .processing-section { display: none; text-align: center; padding: 30px; }
+        .processing-section { 
+            display: none; 
+            text-align: center; 
+            padding: 50px; 
+            background: rgba(255,255,255,0.9);
+            border-radius: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .processing-section {
+            background: rgba(30,30,30,0.9);
+        }
         
         .spinner { 
             border: 4px solid var(--border-light); 
@@ -249,229 +261,130 @@
         
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .flashcard-generator { display: none; }
-        
-        .flashcard-controls { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 40px; 
-            flex-wrap: wrap; 
-            gap: 20px; 
-            padding: 25px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+        .summary-result { 
+            display: none; 
+            background: rgba(255,255,255,0.9);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
         
-        body.dark-mode .flashcard-controls {
-            background: rgba(255,255,255,0.1);
+        body.dark-mode .summary-result {
+            background: rgba(30,30,30,0.9);
         }
         
-        .control-group { display: flex; align-items: center; gap: 10px; }
+        .summary-content {
+            line-height: 1.8;
+            font-size: 16px;
+        }
         
-        .control-btn { 
-            background: linear-gradient(135deg, var(--primary-turquoise), var(--light-turquoise)); 
-            color: var(--white); 
-            border: none; 
-            padding: 12px 24px; 
-            border-radius: 25px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        .summary-content h3 {
+            color: var(--primary-turquoise);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .summary-content h4 {
+            color: var(--text-dark);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .summary-content ul {
+            list-style-type: disc;
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-content li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        .summary-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .summary-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary-turquoise), var(--light-turquoise));
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 5px 15px rgba(32, 178, 170, 0.3);
         }
         
-        .control-btn:hover { 
-            transform: translateY(-3px) scale(1.05); 
+        .action-btn:hover {
+            transform: translateY(-3px) scale(1.05);
             box-shadow: 0 10px 25px rgba(32, 178, 170, 0.4);
         }
         
-        .control-btn.secondary { 
-            background: linear-gradient(135deg, #6c757d, #5a6268); 
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
             box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
         }
         
-        .control-btn.secondary:hover { 
+        .action-btn.secondary:hover {
             box-shadow: 0 10px 25px rgba(108, 117, 125, 0.4);
         }
         
-        .flashcard { 
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,249,250,0.95)); 
-            backdrop-filter: blur(20px);
-            border-radius: 25px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); 
-            margin: 30px auto; 
-            max-width: 700px; 
-            min-height: 350px; 
-            padding: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            border: 1px solid rgba(255,255,255,0.2);
+        .file-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
         }
         
-        body.dark-mode .flashcard {
-            background: linear-gradient(135deg, rgba(30,30,30,0.95), rgba(40,40,40,0.95));
-            border: 1px solid rgba(255,255,255,0.1);
+        .file-info h4 {
+            margin: 0 0 10px 0;
+            color: var(--white);
         }
         
-        .flashcard:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-        }
-        
-        .flashcard-content { 
-            width: 100%; 
-            text-align: center; 
-            color: var(--text-dark);
-        }
-        
-        .flashcard-content h3 { 
-            margin: 0 0 20px 0; 
-            font-size: 28px; 
-            font-weight: 700;
-        }
-        
-        .flashcard-content p {
-            margin: 0;
-            word-wrap: break-word;
-        }
-        
-        .flashcard-navigation { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
-        
-        .nav-btn { 
-            background: linear-gradient(135deg, var(--primary-turquoise), var(--light-turquoise)); 
-            color: var(--white); 
-            border: none; 
-            padding: 15px 30px; 
-            border-radius: 30px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: 0 5px 15px rgba(32, 178, 170, 0.3);
-            font-size: 16px;
-        }
-        
-        .nav-btn:hover { 
-            transform: translateY(-3px) scale(1.05); 
-            box-shadow: 0 10px 25px rgba(32, 178, 170, 0.4);
-        }
-        
-        .nav-btn:disabled { background-color: var(--border-light); cursor: not-allowed; transform: none; }
-        
-        .progress-bar { 
-            background-color: var(--border-light); 
-            height: 12px; 
-            border-radius: 10px; 
-            margin: 30px 0; 
-            overflow: hidden; 
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .progress-fill { 
-            background: linear-gradient(90deg, var(--primary-turquoise), var(--light-turquoise)); 
-            height: 100%; 
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-            border-radius: 10px; 
-            box-shadow: 0 2px 4px rgba(32, 178, 170, 0.3);
-        }
-        
-        .stats-section { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
-            gap: 25px; 
-            margin-top: 40px; 
-        }
-        
-        .stat-card { 
-            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.9)); 
-            backdrop-filter: blur(20px);
-            padding: 30px; 
-            border-radius: 20px; 
-            text-align: center; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        body.dark-mode .stat-card {
-            background: linear-gradient(135deg, rgba(30,30,30,0.9), rgba(40,40,40,0.9));
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-        
-        .stat-number { 
-            font-size: 36px; 
-            font-weight: 800; 
-            background: linear-gradient(135deg, var(--primary-turquoise), var(--light-turquoise));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .stat-label { 
-            color: var(--text-dark); 
-            margin-top: 8px; 
-            font-weight: 600;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .difficulty-buttons { 
-            display: flex; 
-            gap: 15px; 
-            justify-content: center; 
-            margin-top: 25px; 
-        }
-        
-        .difficulty-btn { 
-            padding: 12px 20px; 
-            border: none; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            font-size: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .difficulty-btn.easy { background-color: var(--success-green); color: var(--white); }
-        .difficulty-btn.medium { background-color: var(--warning-orange); color: var(--white); }
-        .difficulty-btn.hard { background-color: var(--error-red); color: var(--white); }
-        
-        .difficulty-btn:hover { 
-            transform: translateY(-3px) scale(1.05); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+        .file-info p {
+            margin: 5px 0;
+            opacity: 0.9;
         }
         
         @media (max-width: 768px) {
-            .flashcard-controls { 
-                flex-direction: column; 
-                align-items: stretch; 
-                padding: 20px;
-            }
-            .control-group { justify-content: center; }
-            .flashcard { 
-                margin: 20px 10px; 
-                min-height: 280px; 
-                max-width: 100%;
-            }
-            .flashcard-content { font-size: 18px; }
-            .flashcard-content h3 { font-size: 24px; }
-            .flashcard-container { 
-                padding: 30px 25px; 
+            .summary-container {
+                padding: 30px 25px;
                 margin-top: 20px;
             }
-            .upload-area { padding: 30px 20px; }
-            .upload-icon { font-size: 48px; }
+            
+            .upload-area {
+                padding: 30px 20px;
+            }
+            
+            .upload-icon {
+                font-size: 48px;
+            }
+            
+            .summary-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 200px;
+            }
         }
     </style>
 </head>
@@ -561,8 +474,8 @@
                             <li><a href="./ders.html?donem=donem6&ders=halk">Halk Sağlığı</a></li>
                         </ul>
                     </li>
-                    <li><a href="./flashcard.html" style="background-color: var(--white); color: var(--primary-turquoise);">Flashcard</a></li>
-                    <li><a href="./slide-summary.html">Slayt Özet</a></li>
+                    <li><a href="./flashcard.html">Flashcard</a></li>
+                    <li><a href="./slide-summary.html" style="background-color: var(--white); color: var(--primary-turquoise);">Slayt Özet</a></li>
                 </ul>
             </nav>
             <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
@@ -570,21 +483,21 @@
     </header>
 
     <div class="container">
-        <div class="flashcard-container">
+        <div class="summary-container">
             <a href="./index.html" class="back-link">&larr; Ana Sayfaya Dön</a>
-            <h2>Flashcard Oluşturucu</h2>
+            <h2>Slayt Özet Oluşturucu</h2>
             
             <!-- Upload Section -->
-            <div class="upload-section" id="uploadSection" style="display: none;">
+            <div class="upload-section" id="uploadSection">
                 <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📄</div>
-                    <h3>Dosyanızı Yükleyin</h3>
-                    <p>PDF, Word, PowerPoint veya metin dosyalarınızı sürükleyip bırakın</p>
-                    <p>veya</p>
+                    <div class="upload-icon">📊</div>
+                    <h3>Slaytlarınızı Yükleyin</h3>
+                    <p>PowerPoint, PDF veya metin dosyalarınızı sürükleyip bırakın</p>
+                    <p>Tıp dersleri için özelleştirilmiş özet oluşturulacak</p>
                     <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Dosya Seç</button>
-                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/plain" multiple>
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.ppt,.pptx,.doc,.docx,.txt,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" multiple>
                     <p style="font-size: 14px; margin-top: 15px; opacity: 0.8;">
-                        Desteklenen formatlar: PDF, DOC, DOCX, PPT, PPTX, TXT
+                        Desteklenen formatlar: PDF, PPT, PPTX, DOC, DOCX, TXT
                     </p>
                 </div>
             </div>
@@ -592,79 +505,22 @@
             <!-- Processing Section -->
             <div class="processing-section" id="processingSection">
                 <div class="spinner"></div>
-                <h3>Dosyanız İşleniyor...</h3>
-                <p>Flashcard'larınız oluşturuluyor, lütfen bekleyin.</p>
+                <h3>Slaytlarınız Analiz Ediliyor...</h3>
+                <p>Tıbbi içerik analiz edilip profesyonel özet hazırlanıyor.</p>
+                <div id="processingInfo"></div>
             </div>
 
-            <!-- Flashcard Generator -->
-            <div class="flashcard-generator" id="flashcardGenerator">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <button class="control-btn" onclick="document.getElementById('uploadSection').style.display='block'; document.getElementById('flashcardGenerator').style.display='none';">
-                        📁 Yeni Dosya Yükle
-                    </button>
+            <!-- Summary Result -->
+            <div class="summary-result" id="summaryResult">
+                <h3 style="color: var(--primary-turquoise); margin-bottom: 25px;">📋 Slayt Özeti</h3>
+                <div class="summary-content" id="summaryContent">
+                    <!-- Özet içeriği buraya gelecek -->
                 </div>
-                
-                <div class="flashcard-controls">
-                    <div class="control-group">
-                        <button class="control-btn" id="shuffleBtn">🔀 Karıştır</button>
-                        <button class="control-btn" id="resetBtn">🔄 Sıfırla</button>
-                    </div>
-                    <div class="control-group">
-                        <span>Kart: <span id="currentCard">1</span> / <span id="totalCards">0</span></span>
-                    </div>
-                    <div class="control-group">
-                        <button class="control-btn secondary" id="studyModeBtn">📚 Çalışma Modu</button>
-                        <button class="control-btn secondary" id="exportBtn">💾 Dışa Aktar</button>
-                    </div>
-                </div>
-
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
-
-                <div class="flashcard" id="flashcard">
-                    <!-- Soru Bölümü -->
-                    <div class="flashcard-content" id="questionSection">
-                        <h3 style="color: var(--primary-turquoise); margin-bottom: 20px;">📝 Soru</h3>
-                        <p id="questionText" style="font-size: 22px; line-height: 1.6; font-weight: 500;">Flashcard yüklemek için dosya seçin</p>
-                    </div>
-                    
-                    <!-- Cevap Bölümü -->
-                    <div class="flashcard-content" id="answerSection" style="display: none;">
-                        <h3 style="color: var(--success-green); margin-bottom: 20px;">💡 Cevap</h3>
-                        <p id="answerText" style="font-size: 20px; line-height: 1.7; font-weight: 400;">Cevap burada görünecek</p>
-                    </div>
-                </div>
-
-                <div class="difficulty-buttons" id="difficultyButtons" style="display: none;">
-                    <button class="difficulty-btn easy" onclick="markDifficulty('easy')">😊 Kolay</button>
-                    <button class="difficulty-btn medium" onclick="markDifficulty('medium')">😐 Orta</button>
-                    <button class="difficulty-btn hard" onclick="markDifficulty('hard')">😰 Zor</button>
-                </div>
-
-                <div class="flashcard-navigation">
-                    <button class="nav-btn" id="prevBtn">⬅ Önceki</button>
-                    <button class="nav-btn" id="flipBtn">💡 Cevabı Göster</button>
-                    <button class="nav-btn" id="nextBtn">Sonraki ➡</button>
-                </div>
-
-                <div class="stats-section">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalStat">0</div>
-                        <div class="stat-label">Toplam Kart</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="studiedStat">0</div>
-                        <div class="stat-label">Çalışılan</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="easyStat">0</div>
-                        <div class="stat-label">Kolay</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="hardStat">0</div>
-                        <div class="stat-label">Zor</div>
-                    </div>
+                <div class="summary-actions">
+                    <button class="action-btn" onclick="copySummary()">📋 Kopyala</button>
+                    <button class="action-btn" onclick="downloadSummary()">💾 İndir</button>
+                    <button class="action-btn" onclick="createFlashcards()">🎯 Flashcard Oluştur</button>
+                    <button class="action-btn secondary" onclick="newSummary()">🔄 Yeni Özet</button>
                 </div>
             </div>
         </div>
@@ -676,6 +532,6 @@
         </div>
     </footer>
 
-    <script src="flashcard.js"></script>
+    <script src="slide-summary.js"></script>
 </body>
 </html>
