@@ -595,7 +595,7 @@
             <h2>Flashcard Oluşturucu</h2>
             
             <!-- Upload Section -->
-            <div class="upload-section" id="uploadSection">
+            <div class="upload-section" id="uploadSection" style="display: none;">
                 <div class="upload-area" id="uploadArea">
                     <div class="upload-icon">📄</div>
                     <h3>Dosyanızı Yükleyin</h3>
@@ -618,6 +618,12 @@
 
             <!-- Flashcard Generator -->
             <div class="flashcard-generator" id="flashcardGenerator">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <button class="control-btn" onclick="document.getElementById('uploadSection').style.display='block'; document.getElementById('flashcardGenerator').style.display='none';">
+                        📁 Yeni Dosya Yükle
+                    </button>
+                </div>
+                
                 <div class="flashcard-controls">
                     <div class="control-group">
                         <button class="control-btn" id="shuffleBtn">🔀 Karıştır</button>
